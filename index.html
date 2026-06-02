@@ -252,6 +252,9 @@ footer{
 
         <button class="btn" onclick="startMic()">Start Monitoring</button>
 
+<button class="btn" onclick="stopMic()">Stop Monitoring</button>
+        
+
         <div class="alert" id="alert">
             ⚠️ PERINGATAN! Mohon menjaga ketenangan area perpustakaan.
         </div>
@@ -269,7 +272,16 @@ footer{
 let animationId;
 
 async function startMic(){
+function stopMic() {
+    if (animationId) {
+        cancelAnimationFrame(animationId);
+    }
 
+    document.getElementById("status").innerText = "STOP";
+    document.getElementById("bar").style.width = "0%";
+    document.getElementById("level").innerText = "0 dB";
+    document.getElementById("alert").style.display = "none";
+}
     const stream =
     await navigator.mediaDevices.getUserMedia({audio:true});
 
