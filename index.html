@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,42 +8,57 @@
 <style>
 body{
     font-family: Arial, sans-serif;
-    margin:0;
     background:#f4f6f9;
+    text-align:center;
+    margin:0;
 }
 
 header{
     background:#2563eb;
     color:white;
-    text-align:center;
-    padding:40px;
+    padding:30px;
 }
 
 .container{
-    max-width:1000px;
-    margin:auto;
-    padding:20px;
+    margin-top:30px;
 }
 
-.card{
-    background:white;
-    padding:20px;
-    margin:15px 0;
-    border-radius:10px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+#meter{
+    width:300px;
+    height:30px;
+    background:#ddd;
+    margin:20px auto;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+#bar{
+    height:100%;
+    width:0%;
+    background:green;
 }
 
 button{
-    background:#2563eb;
-    color:white;
-    border:none;
     padding:12px 20px;
+    margin:10px;
+    border:none;
     border-radius:8px;
     cursor:pointer;
 }
 
-button:hover{
-    background:#1d4ed8;
+.start{
+    background:#22c55e;
+    color:white;
+}
+
+.stop{
+    background:#ef4444;
+    color:white;
+}
+
+#status{
+    font-size:24px;
+    font-weight:bold;
 }
 </style>
 </head>
@@ -52,40 +67,105 @@ button:hover{
 
 <header>
     <h1>🎤 Noise Detector</h1>
-    <p>Sistem Deteksi Tingkat Kebisingan Berbasis Python</p>
+    <p>Deteksi Kebisingan Real-Time</p>
 </header>
 
 <div class="container">
 
-    <div class="card">
-        <h2>📖 Tentang Project</h2>
-        <p>
-            Noise Detector merupakan aplikasi yang digunakan untuk
-            mendeteksi tingkat kebisingan secara real-time menggunakan
-            mikrofon dan analisis frekuensi suara.
-        </p>
+    <h2 id="status">Menunggu...</h2>
+
+    <div id="meter">
+        <div id="bar"></div>
     </div>
 
-    <div class="card">
-        <h2>✨ Fitur</h2>
-        <ul>
-            <li>Deteksi kebisingan real-time</li>
-            <li>Analisis frekuensi dominan</li>
-            <li>Penyimpanan hasil pengukuran</li>
-            <li>Monitoring kondisi lingkungan</li>
-        </ul>
-    </div>
+    <h3>Level Suara: <span id="value">0</span></h3>
 
-    <div class="card">
-        <h2>🚀 Teknologi</h2>
-        <p>Python, NumPy, Librosa, SoundDevice, GitHub Pages</p>
-    </div>
-
-    <button onclick="alert('Noise Detector Project')">
-        Coba Website
-    </button>
+    <button class="start" onclick="startMic()">Start</button>
+    <button class="stop" onclick="stopMic()">Stop</button>
 
 </div>
+
+<script>
+
+let audioContext;
+let analyser;
+let microphone;
+let animationId;
+
+async function startMic(){
+
+    const stream =
+        await navigator.mediaDevices.getUserMedia({audio:true});
+
+    audioContext = new AudioContext();
+    analyser = audioContext.createAnalyser();
+
+    microphone =
+        audioContext.createMediaStreamSource(stream);
+
+    microphone.connect(analyser);
+
+    analyser.fftSize = 256;
+
+    const dataArray =
+        new Uint8Array(analyser.frequencyBinCount);
+
+    function update(){
+
+        analyser.getByteFrequencyData(dataArray);
+
+        let sum = 0;
+
+        for(let i=0;i<dataArray.length;i++){
+            sum += dataArray[i];
+        }
+
+        let volume = sum / dataArray.length;
+
+        document.getElementById("value")
+            .innerText = volume.toFixed(0);
+
+        let percent = Math.min(volume,100);
+
+        document.getElementById("bar")
+            .style.width = percent + "%";
+
+        if(volume < 20){
+            document.getElementById("status")
+                .innerText = "Tenang";
+        }
+        else if(volume < 50){
+            document.getElementById("status")
+                .innerText = "Sedang";
+        }
+        else{
+            document.getElementById("status")
+                .innerText = "Bising";
+        }
+
+        animationId =
+            requestAnimationFrame(update);
+    }
+
+    update();
+}
+
+function stopMic(){
+
+    cancelAnimationFrame(animationId);
+
+    if(audioContext){
+        audioContext.close();
+    }
+
+    document.getElementById("status")
+        .innerText = "Berhenti";
+
+    document.getElementById("bar")
+        .style.width = "0%";
+}
+
+</script>
 
 </body>
 </html>
