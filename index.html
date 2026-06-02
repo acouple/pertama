@@ -3,166 +3,352 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Noise Detector</title>
+<title>Smart Library Seat</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-body{
-    font-family: Arial, sans-serif;
-    background:#f4f6f9;
-    text-align:center;
+
+*{
     margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
 }
 
-header{
+body{
+    background:#f4f7fc;
+    color:#1e293b;
+}
+
+nav{
+    background:#082f49;
+    color:white;
+    padding:18px 8%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:700;
+}
+
+nav ul{
+    display:flex;
+    list-style:none;
+    gap:30px;
+}
+
+.hero{
+    min-height:90vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0 8%;
+    gap:50px;
+}
+
+.hero-text{
+    flex:1;
+}
+
+.hero-text h1{
+    font-size:60px;
+    line-height:1.1;
+    color:#082f49;
+}
+
+.hero-text span{
+    color:#2563eb;
+}
+
+.hero-text p{
+    margin-top:20px;
+    font-size:18px;
+    color:#475569;
+}
+
+.btn{
+    display:inline-block;
+    margin-top:25px;
+    padding:14px 28px;
     background:#2563eb;
     color:white;
-    padding:30px;
+    text-decoration:none;
+    border-radius:12px;
+    font-weight:600;
 }
 
-.container{
-    margin-top:30px;
+.hero-image{
+    flex:1;
+    text-align:center;
+    font-size:180px;
+}
+
+.section{
+    padding:80px 8%;
+}
+
+.title{
+    text-align:center;
+    margin-bottom:50px;
+}
+
+.title h2{
+    font-size:40px;
+    color:#082f49;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+}
+
+.card{
+    background:white;
+    padding:30px;
+    border-radius:18px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.card h3{
+    margin-bottom:10px;
+}
+
+.monitor{
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    text-align:center;
+}
+
+#status{
+    font-size:40px;
+    font-weight:700;
+    margin-bottom:20px;
 }
 
 #meter{
-    width:300px;
-    height:30px;
-    background:#ddd;
-    margin:20px auto;
+    width:100%;
+    max-width:700px;
+    height:35px;
+    background:#e2e8f0;
+    margin:auto;
     border-radius:20px;
     overflow:hidden;
 }
 
 #bar{
-    height:100%;
     width:0%;
-    background:green;
+    height:100%;
+    transition:.3s;
 }
 
-button{
-    padding:12px 20px;
-    margin:10px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
+#level{
+    margin-top:20px;
+    font-size:30px;
+    font-weight:700;
 }
 
-.start{
-    background:#22c55e;
+.alert{
+    margin-top:25px;
+    background:#fee2e2;
+    color:#b91c1c;
+    padding:18px;
+    border-radius:12px;
+    display:none;
+}
+
+footer{
+    background:#082f49;
     color:white;
+    text-align:center;
+    padding:30px;
+    margin-top:80px;
 }
 
-.stop{
-    background:#ef4444;
-    color:white;
-}
-
-#status{
-    font-size:24px;
-    font-weight:bold;
-}
 </style>
 </head>
 
 <body>
 
-<header>
-    <h1>🎤 Noise Detector</h1>
-    <p>Deteksi Kebisingan Real-Time</p>
-</header>
+<nav>
+    <div class="logo">📚 Smart Library Seat</div>
+    <ul>
+        <li>Beranda</li>
+        <li>Monitoring</li>
+        <li>Tentang</li>
+        <li>Tim</li>
+    </ul>
+</nav>
 
-<div class="container">
+<section class="hero">
+    <div class="hero-text">
+        <h1>SMART <span>LIBRARY</span> SEAT</h1>
 
-    <h2 id="status">Menunggu...</h2>
+        <p>
+        Sistem monitoring kebisingan pada kursi perpustakaan.
+        Apabila tingkat kebisingan melebihi batas yang ditentukan,
+        sistem akan memberikan peringatan untuk menjaga suasana
+        belajar tetap tenang dan kondusif.
+        </p>
 
-    <div id="meter">
-        <div id="bar"></div>
+        <a href="#monitor" class="btn">Mulai Monitoring</a>
     </div>
 
-    <h3>Level Suara: <span id="value">0</span></h3>
+    <div class="hero-image">
+        📖
+    </div>
+</section>
 
-    <button class="start" onclick="startMic()">Start</button>
-    <button class="stop" onclick="stopMic()">Stop</button>
+<section class="section">
+    <div class="title">
+        <h2>Fitur Sistem</h2>
+    </div>
 
-</div>
+    <div class="cards">
+
+        <div class="card">
+            <h3>🎤 Deteksi Real-Time</h3>
+            <p>Mendeteksi kebisingan secara langsung melalui mikrofon.</p>
+        </div>
+
+        <div class="card">
+            <h3>🚨 Peringatan Otomatis</h3>
+            <p>Memberikan notifikasi ketika kebisingan melebihi ambang batas.</p>
+        </div>
+
+        <div class="card">
+            <h3>📊 Monitoring</h3>
+            <p>Menampilkan level kebisingan secara real-time.</p>
+        </div>
+
+    </div>
+</section>
+
+<section class="section" id="monitor">
+
+    <div class="title">
+        <h2>Monitoring Kebisingan</h2>
+    </div>
+
+    <div class="monitor">
+
+        <div id="status">TENANG</div>
+
+        <div id="meter">
+            <div id="bar"></div>
+        </div>
+
+        <div id="level">0 dB</div>
+
+        <button class="btn" onclick="startMic()">Start Monitoring</button>
+
+        <div class="alert" id="alert">
+            ⚠️ PERINGATAN! Mohon menjaga ketenangan area perpustakaan.
+        </div>
+
+    </div>
+
+</section>
+
+<footer>
+    Smart Library Seat © 2026
+</footer>
 
 <script>
 
-let audioContext;
-let analyser;
-let microphone;
 let animationId;
 
 async function startMic(){
 
     const stream =
-        await navigator.mediaDevices.getUserMedia({audio:true});
+    await navigator.mediaDevices.getUserMedia({audio:true});
 
-    audioContext = new AudioContext();
-    analyser = audioContext.createAnalyser();
+    const audioContext =
+    new AudioContext();
 
-    microphone =
-        audioContext.createMediaStreamSource(stream);
+    const analyser =
+    audioContext.createAnalyser();
+
+    const microphone =
+    audioContext.createMediaStreamSource(stream);
 
     microphone.connect(analyser);
 
     analyser.fftSize = 256;
 
-    const dataArray =
-        new Uint8Array(analyser.frequencyBinCount);
+    const data =
+    new Uint8Array(analyser.frequencyBinCount);
 
     function update(){
 
-        analyser.getByteFrequencyData(dataArray);
+        analyser.getByteFrequencyData(data);
 
         let sum = 0;
 
-        for(let i=0;i<dataArray.length;i++){
-            sum += dataArray[i];
+        for(let i=0;i<data.length;i++){
+            sum += data[i];
         }
 
-        let volume = sum / dataArray.length;
+        let volume = sum / data.length;
 
-        document.getElementById("value")
-            .innerText = volume.toFixed(0);
+        document.getElementById("level")
+        .innerText = volume.toFixed(0)+" dB";
 
-        let percent = Math.min(volume,100);
+        let percent =
+        Math.min(volume,100);
 
-        document.getElementById("bar")
-            .style.width = percent + "%";
+        let bar =
+        document.getElementById("bar");
+
+        bar.style.width =
+        percent+"%";
 
         if(volume < 20){
+
+            bar.style.background="#22c55e";
+
             document.getElementById("status")
-                .innerText = "Tenang";
-        }
-        else if(volume < 50){
+            .innerText="TENANG";
+
+            document.getElementById("alert")
+            .style.display="none";
+
+        }else if(volume < 50){
+
+            bar.style.background="#facc15";
+
             document.getElementById("status")
-                .innerText = "Sedang";
-        }
-        else{
+            .innerText="WASPADA";
+
+            document.getElementById("alert")
+            .style.display="none";
+
+        }else{
+
+            bar.style.background="#ef4444";
+
             document.getElementById("status")
-                .innerText = "Bising";
+            .innerText="BISING";
+
+            document.getElementById("alert")
+            .style.display="block";
         }
 
         animationId =
-            requestAnimationFrame(update);
+        requestAnimationFrame(update);
     }
 
     update();
-}
-
-function stopMic(){
-
-    cancelAnimationFrame(animationId);
-
-    if(audioContext){
-        audioContext.close();
-    }
-
-    document.getElementById("status")
-        .innerText = "Berhenti";
-
-    document.getElementById("bar")
-        .style.width = "0%";
 }
 
 </script>
