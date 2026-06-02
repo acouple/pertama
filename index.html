@@ -270,18 +270,22 @@ footer{
 <script>
 
 let animationId;
+let stream;
+let audioContext;
 
-async function startMic(){
-function stopMic() {
-    if (animationId) {
-        cancelAnimationFrame(animationId);
+function stopMic(){
+
+    cancelAnimationFrame(animationId);
+
+    if(audioContext){
+        audioContext.close();
     }
 
-    document.getElementById("status").innerText = "STOP";
-    document.getElementById("bar").style.width = "0%";
-    document.getElementById("level").innerText = "0 dB";
-    document.getElementById("alert").style.display = "none";
+    document.getElementById("status").innerText="BERHENTI";
+
 }
+async function startMic(){
+
     const stream =
     await navigator.mediaDevices.getUserMedia({audio:true});
 
