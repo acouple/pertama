@@ -388,6 +388,10 @@ async function startMic(){
 
             document.getElementById("alert")
             .style.display="block";
+
+            if (navigator.vibrate) {
+    navigator.vibrate([500, 200, 500, 200, 500]);
+}
         }
 
         document.getElementById("statusCard").innerText =
