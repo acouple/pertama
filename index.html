@@ -261,9 +261,8 @@ footer{
         <div id="meter">
             <div id="bar"></div>
         </div>
-        <input
-id="libraryId"
-placeholder="Masukkan ID Perpustakaan"
+        
+<select id="seatId"
 style="
 padding:12px;
 border-radius:10px;
@@ -271,11 +270,22 @@ border:1px solid #cbd5e1;
 margin:10px;
 width:250px;
 ">
-<select id="seatId">
+  <option value="">-- Pilih Kursi Terlebih Dahulu --</option>
   <option>A1</option>
   <option>A2</option>
   <option>A3</option>
+  <option>B1</option>
+  <option>B2</option>
+  <option>B3</option>
 </select>
+
+<div id="seatInfo"
+style="
+margin-top:15px;
+font-weight:600;
+color:#2563eb;
+">
+</div>
         <div class="cards">
 
 <div class="card">
@@ -320,6 +330,25 @@ let animationId;
 let stream;
 let audioContext;
 
+let alarmPlaying = false;
+
+function playAlarm(){
+
+    if(alarmPlaying) return;
+
+    alarmPlaying = true;
+
+    const audio = new Audio(
+    "https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg"
+    );
+
+    audio.play();
+
+    audio.onended = () => {
+        alarmPlaying = false;
+    };
+}
+
 function stopMic(){
     cancelAnimationFrame(animationId);
 
@@ -330,14 +359,15 @@ function stopMic(){
 }
 
 async function startMic(){
-let libraryId =
-document.getElementById("libraryId").value;
 let seatId = document.getElementById("seatId").value;
 
-if(!libraryId.startsWith("LIB-")){
-    alert("Masukkan ID Perpustakaan yang valid!");
+if(seatId === ""){
+    alert("Silakan pilih kursi terlebih dahulu sebelum masuk perpustakaan!");
     return;
 }
+
+document.getElementById("seatInfo").innerHTML =
+`💺 Kursi Aktif: ${seatId}`;
 
     const stream =
     await navigator.mediaDevices.getUserMedia({audio:true});
@@ -376,7 +406,6 @@ if(!libraryId.startsWith("LIB-")){
         "Content-Type": "application/json"
     },
     body: JSON.stringify({
-    libraryId: libraryId,
     seat: seatId,
     volume: volume,
     status: document.getElementById("status").innerText
@@ -417,18 +446,20 @@ if(!libraryId.startsWith("LIB-")){
 
         }else{
 
-            bar.style.background="#ef4444";
+    bar.style.background="#ef4444";
 
-            document.getElementById("status")
-            .innerText="BISING";
+    document.getElementById("status")
+    .innerText="BISING";
 
-            document.getElementById("alert")
-            .style.display="block";
+    document.getElementById("alert")
+    .style.display="block";
 
-            if (navigator.vibrate) {
-    navigator.vibrate([500, 200, 500, 200, 500]);
+    if (navigator.vibrate) {
+        navigator.vibrate([500, 200, 500, 200, 500]);
+    }
+
+    playAlarm();
 }
-        }
 
         document.getElementById("statusCard").innerText =
 document.getElementById("status").innerText;
