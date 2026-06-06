@@ -261,6 +261,21 @@ footer{
         <div id="meter">
             <div id="bar"></div>
         </div>
+        <input
+id="libraryId"
+placeholder="Masukkan ID Perpustakaan"
+style="
+padding:12px;
+border-radius:10px;
+border:1px solid #cbd5e1;
+margin:10px;
+width:250px;
+">
+<select id="seatId">
+  <option>A1</option>
+  <option>A2</option>
+  <option>A3</option>
+</select>
         <div class="cards">
 
 <div class="card">
@@ -315,6 +330,14 @@ function stopMic(){
 }
 
 async function startMic(){
+let libraryId =
+document.getElementById("libraryId").value;
+let seatId = document.getElementById("seatId").value;
+
+if(!libraryId.startsWith("LIB-")){
+    alert("Masukkan ID Perpustakaan yang valid!");
+    return;
+}
 
     const stream =
     await navigator.mediaDevices.getUserMedia({audio:true});
@@ -346,6 +369,19 @@ async function startMic(){
         }
 
         let volume = sum / data.length;
+
+        fetch("http://localhost:3000/noise", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+    libraryId: libraryId,
+    seat: seatId,
+    volume: volume,
+    status: document.getElementById("status").innerText
+})
+});
 
         document.getElementById("level")
         .innerText = volume.toFixed(0)+" dB";
