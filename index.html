@@ -307,9 +307,7 @@ color:#2563eb;
 
         <div id="level">0 dB</div>
 
-        <button class="btn" onclick="startMic()">Start Monitoring</button>
-
-<button class="btn" onclick="stopMic()">Stop Monitoring</button>
+        <button class="btn" onclick="startMic()">Masuk Perpustakaan</button>
         
 
         <div class="alert" id="alert">
@@ -347,15 +345,6 @@ function playAlarm(){
     audio.onended = () => {
         alarmPlaying = false;
     };
-}
-
-function stopMic(){
-    cancelAnimationFrame(animationId);
-
-    document.getElementById("status").innerText = "STOP";
-    document.getElementById("bar").style.width = "0%";
-    document.getElementById("level").innerText = "0 dB";
-    document.getElementById("alert").style.display = "none";
 }
 
 async function startMic(){
