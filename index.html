@@ -191,7 +191,7 @@ footer{
 <body>
 
 <nav>
-    <div class="logo">📚 Smart Library Seat</div>
+    <div class="logo">📚 Library Noise Detector</div>
     <ul>
         <li>Beranda</li>
         <li>Monitoring</li>
@@ -202,16 +202,17 @@ footer{
 
 <section class="hero">
     <div class="hero-text">
-        <h1>SMART <span>LIBRARY</span> SEAT</h1>
+        <h1>LIBRARY <span>NOISE</span> DETECTOR</h1>
 
         <p>
-        Sistem monitoring kebisingan pada kursi perpustakaan.
-        Apabila tingkat kebisingan melebihi batas yang ditentukan,
-        sistem akan memberikan peringatan untuk menjaga suasana
-        belajar tetap tenang dan kondusif.
-        </p>
+Library Noise Detector merupakan sistem monitoring kebisingan
+berbasis web yang dirancang untuk menjaga suasana perpustakaan
+tetap tenang dan kondusif. Sistem akan mendeteksi tingkat
+kebisingan secara real-time dan memberikan peringatan otomatis
+apabila suara melebihi ambang batas yang telah ditentukan.
+</p>
 
-        <a href="#monitor" class="btn">Mulai Monitoring</a>
+        <a href="#monitor" class="btn">Mulai Deteksi Suara</a>
     </div>
 
     <div class="hero-image">
@@ -299,8 +300,8 @@ color:#2563eb;
 </div>
 
 <div class="card">
-<h3>Kondisi</h3>
-<p>Perpustakaan</p>
+<h3>Kursi Aktif</h3>
+<p id="seatCard">Belum Dipilih</p>
 </div>
 
 </div>
@@ -319,7 +320,7 @@ color:#2563eb;
 </section>
 
 <footer>
-    Smart Library Seat © 2026
+    Library Noise Detector © 2026
 </footer>
 
 <script>
@@ -357,6 +358,7 @@ if(seatId === ""){
 
 document.getElementById("seatInfo").innerHTML =
 `💺 Kursi Aktif: ${seatId}`;
+document.getElementById("seatCard").innerText = seatId;
 
     const stream =
     await navigator.mediaDevices.getUserMedia({audio:true});
