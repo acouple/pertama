@@ -309,6 +309,11 @@ color:#2563eb;
         <div id="level">0 dB</div>
 
         <button class="btn" onclick="startMic()">Masuk Perpustakaan</button>
+        <button class="btn"
+onclick="stopMic()"
+style="background:#ef4444;">
+Keluar Perpustakaan
+</button>
         
 
         <div class="alert" id="alert">
@@ -330,6 +335,7 @@ let stream;
 let audioContext;
 
 let alarmPlaying = false;
+let currentAlarm;
 
 function playAlarm(){
 
@@ -360,11 +366,11 @@ document.getElementById("seatInfo").innerHTML =
 `💺 Kursi Aktif: ${seatId}`;
 document.getElementById("seatCard").innerText = seatId;
 
-    const stream =
-    await navigator.mediaDevices.getUserMedia({audio:true});
+    stream =
+await navigator.mediaDevices.getUserMedia({audio:true});
 
-    const audioContext =
-    new AudioContext();
+audioContext =
+new AudioContext();
 
     const analyser =
     audioContext.createAnalyser();
@@ -482,7 +488,31 @@ if(status === "BISING"){
 
     update();
 }
+function stopMic(){
 
+    if(animationId){
+        cancelAnimationFrame(animationId);
+    }
+
+    if(stream){
+        stream.getTracks().forEach(track => track.stop());
+    }
+
+    if(audioContext){
+        audioContext.close();
+    }
+
+    document.getElementById("level").innerText = "0 dB";
+    document.getElementById("status").innerText = "TENANG";
+    document.getElementById("statusCard").innerText = "Tenang";
+
+    document.getElementById("bar").style.width = "0%";
+
+    document.getElementById("alert").style.display = "none";
+
+    document.querySelector(".monitor")
+    .classList.remove("bising");
+}
 </script>
 
 </body>
